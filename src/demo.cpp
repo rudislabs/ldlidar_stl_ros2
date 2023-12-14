@@ -49,6 +49,7 @@ int main(int argc, char **argv) {
   setting.y_crop_max = 0.0;
   setting.range_min = 0.03;
   setting.range_max = 25.0;
+  setting.pub_rate= 10.0;
   
   // declare ros2 param
   node->declare_parameter<std::string>("product_name", product_name);
@@ -68,6 +69,7 @@ int main(int argc, char **argv) {
   node->declare_parameter<double>("y_crop_max", setting.y_crop_max);
   node->declare_parameter<double>("range_min", setting.range_min);
   node->declare_parameter<double>("range_max", setting.range_max);
+  node->declare_parameter<double>("pub_rate", setting.pub_rate);
 
   // get ros2 param
   node->get_parameter("product_name", product_name);
@@ -87,6 +89,7 @@ int main(int argc, char **argv) {
   node->get_parameter("y_crop_max", setting.y_crop_max);
   node->get_parameter("range_min", setting.range_min);
   node->get_parameter("range_max", setting.range_max);
+  node->get_parameter("pub_rate", setting.pub_rate);
 
   ldlidar::LDLidarDriver* ldlidarnode = new ldlidar::LDLidarDriver();
 
@@ -106,6 +109,7 @@ int main(int argc, char **argv) {
   RCLCPP_INFO(node->get_logger(), "<x_crop_max>: %f", setting.x_crop_max);
   RCLCPP_INFO(node->get_logger(), "<y_crop_min>: %f", setting.y_crop_min);
   RCLCPP_INFO(node->get_logger(), "<y_crop_max>: %f", setting.y_crop_max);
+  RCLCPP_INFO(node->get_logger(), "<pub_rate>: %f", setting.pub_rate);
 
   if (setting.bins > 0 && setting.bins < 10) {
     RCLCPP_INFO(node->get_logger(), "recommend increasing bin number");
@@ -144,7 +148,7 @@ int main(int argc, char **argv) {
   rclcpp::Publisher<sensor_msgs::msg::LaserScan>::SharedPtr publisher = 
       node->create_publisher<sensor_msgs::msg::LaserScan>(topic_name, 10);
   
-  rclcpp::WallRate r(10); //10hz
+  rclcpp::WallRate r(setting.pub_rate);
 
   ldlidar::Points2D laser_scan_points;
   double lidar_scan_freq;

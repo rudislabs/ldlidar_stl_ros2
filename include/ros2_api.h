@@ -40,6 +40,7 @@ struct LaserScanSetting
   int  bins;
   double range_min;
   double range_max;
+  double pub_rate;
 };
 
 #endif //__ROS_API_H__
