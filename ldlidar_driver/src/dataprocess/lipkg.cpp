@@ -149,7 +149,7 @@ bool LiPkg::Parse(const uint8_t *data, long len) {
       is_poweron_comm_normal_ = true;
       // parse a package is success
       double diff = (pkg_.end_angle / 100 - pkg_.start_angle / 100 + 360) % 360;
-      if (diff <= ((double)pkg_.speed * POINT_PER_PACK / measure_point_frequence_ * 1.5)) {
+      if (diff <= ((double)pkg_.speed * (double)POINT_PER_PACK / measure_point_frequence_ * 1.5)) {
         
         if (0 == last_pkg_timestamp_) {
           last_pkg_timestamp_ = get_timestamp_();
